@@ -8,7 +8,9 @@
 
 于是我做了 PulseLight。
 
-> 配图建议：右侧吸边状态下的 PulseLight，以及鼠标移入后展开的完整面板。
+下面这张图按当前 SwiftUI 实现绘制，展示右侧吸边和鼠标移入后的展开状态。为了看清 6pt 吸边，收起状态在图中做了放大处理；它不是运行时截图。
+
+![PulseLight 80/20 吸边与展开面板实现预览](../images/pulselight-80-20-implementation.svg)
 
 ## 为什么是 80 / 20
 

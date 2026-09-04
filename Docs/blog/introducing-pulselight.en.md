@@ -9,6 +9,12 @@ Pulse already answered the second question with a compact floating usage
 panel. AgLight had a clear answer for the first one: a traffic light. I built
 PulseLight to make those two signals share one quiet place on the screen edge.
 
+The image below follows the current SwiftUI layout and shows the docked rail
+and the panel after hover. The collapsed 6pt rail is enlarged for readability,
+so this is an implementation preview rather than a runtime screenshot.
+
+![PulseLight 80/20 edge rail and expanded panel implementation preview](../images/pulselight-80-20-implementation.svg)
+
 ## Why 80 / 20
 
 The collapsed rail is only 6pt wide, so every colour needs a single meaning.

@@ -9,6 +9,11 @@ PulseLight combines the multi-provider quota panel from
 inspired by [AgLight](https://github.com/ryubyte/aglight). It stays as a 6pt
 edge strip until you point at it, then expands into the full usage panel.
 
+The preview below follows the current SwiftUI layout (dark mode, enlarged for
+readability; it is an implementation preview rather than a runtime screenshot):
+
+![PulseLight 80/20 edge rail and expanded panel implementation preview](Docs/images/pulselight-80-20-implementation.svg)
+
 ## The 80 / 20 rail
 
 | Area | Colour | Meaning |

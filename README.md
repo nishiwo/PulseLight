@@ -8,6 +8,10 @@ PulseLight 将 [Pulse](https://github.com/qunqin24/Pulse) 的多模型额度展�
 [AgLight](https://github.com/ryubyte/aglight) 的 AI 运行状态思路合并为一个轻量应用：
 平时只显示一条 6pt 的吸边颜色条，鼠标移入后展开完整用量面板。
 
+下面是按当前 SwiftUI 实现绘制的界面预览（深色模式，比例为展示方便放大；不是运行时截图）：
+
+![PulseLight 80/20 吸边与展开面板实现预览](Docs/images/pulselight-80-20-implementation.svg)
+
 ## 80 / 20 吸边设计
 
 | 区域 | 颜色 | 含义 |
