@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import Foundation
 
 /// What one model charges, per million tokens.
@@ -138,7 +139,7 @@ actor ModelPrices {
 
 /// Where Pulse keeps the things too big for `UserDefaults`.
 enum PulseStorage {
-    static let directory: URL = URL.applicationSupportDirectory.appending(path: "Pulse")
+    static let directory: URL = URL.applicationSupportDirectory.appending(path: "PulseLight")
 
     static func prepare() {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

@@ -1,0 +1,15 @@
+PulseLight
+Copyright 2026 PulseLight contributors
+
+This product is derived from Pulse by qunqin24:
+https://github.com/qunqin24/Pulse
+
+Pulse is licensed under the Apache License, Version 2.0. PulseLight retains
+that license and the original repository history. Files changed for
+PulseLight carry a modification notice, and the user-facing changes are
+described in CHANGELOG.md.
+
+The agent traffic-light interaction was inspired by AgLight by ryubyte:
+https://github.com/ryubyte/aglight
+
+No AgLight source code or binary is distributed as part of PulseLight.

@@ -1,6 +1,7 @@
 #!/bin/bash
+# Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 #
-# Assembles Pulse.app from the SwiftPM build.
+# Assembles PulseLight.app from the SwiftPM build.
 #
 # Pulse has no Xcode project on purpose — it is a plain package, and this is
 # what turns the package's bare executable into something macOS treats as an
@@ -8,8 +9,8 @@
 # version number to compare against (so no update check), `SMAppService` cannot
 # register a login item, and there is nothing to hand anyone but a build folder.
 #
-#   ./Scripts/bundle.sh            → build.noindex/Pulse.app
-#   ./Scripts/bundle.sh --zip      → and build.noindex/Pulse-<version>.zip to attach
+#   ./Scripts/bundle.sh            → build.noindex/PulseLight.app
+#   ./Scripts/bundle.sh --zip      → and build.noindex/PulseLight-<version>.zip
 #                                    to the release
 #   ./Scripts/bundle.sh --open     → and reveal it in Finder
 #
@@ -22,20 +23,21 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 VERSION="$(tr -d '[:space:]' < VERSION)"
-APP="build.noindex/Pulse.app"
-BUNDLE_ID="io.github.qunqin24.Pulse"
-FEED_URL="https://raw.githubusercontent.com/qunqin24/Pulse/main/appcast.xml"
-# Public half of the EdDSA key updates are signed with. Safe to commit — it is
-# what *verifies* an update, and Sparkle refuses anything not signed by its
-# private half. See Scripts/appcast.py.
-PUBLIC_KEY="$(tr -d '[:space:]' < Scripts/sparkle-public-key.txt)"
+APP="build.noindex/PulseLight.app"
+BUNDLE_ID="com.pulselight.app"
 
-echo "Building Pulse $VERSION (universal)…"
+BUILD_ARGUMENTS=(-c release)
+if /usr/bin/xcodebuild -version >/dev/null 2>&1; then
+    echo "Building PulseLight $VERSION (universal)…"
+    # Both architectures when the full Xcode toolchain is present.
+    BUILD_ARGUMENTS+=(--arch arm64 --arch x86_64)
+else
+    echo "Building PulseLight $VERSION (native architecture; full Xcode not found)…"
+fi
 
-# Both architectures, so the same download runs on Apple Silicon and Intel.
-swift build -c release --arch arm64 --arch x86_64
+swift build "${BUILD_ARGUMENTS[@]}"
 
-BUILT="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)"
+BUILT="$(swift build "${BUILD_ARGUMENTS[@]}" --show-bin-path)"
 
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
@@ -74,8 +76,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleName</key><string>Pulse</string>
-    <key>CFBundleDisplayName</key><string>Pulse</string>
+    <key>CFBundleName</key><string>PulseLight</string>
+    <key>CFBundleDisplayName</key><string>PulseLight</string>
     <key>CFBundleExecutable</key><string>Pulse</string>
     <key>CFBundleIdentifier</key><string>$BUNDLE_ID</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
@@ -89,17 +91,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
          told what to show. -->
     <key>LSUIElement</key><true/>
     <key>NSHighResolutionCapable</key><true/>
-    <key>NSHumanReadableCopyright</key><string>github.com/qunqin24/Pulse</string>
-    <key>SUFeedURL</key><string>$FEED_URL</string>
-    <key>SUPublicEDKey</key><string>$PUBLIC_KEY</string>
-    <!-- Checked on a schedule without asking first. Sparkle would normally put
-         up a permission prompt, but Pulse is an .accessory app whose panel
-         never becomes key, so that window can open behind everything and go
-         unanswered. The toggle is in Settings instead, where it can be found. -->
-    <key>SUEnableAutomaticChecks</key><true/>
-    <!-- Downloading and installing on its own stays off: an update is offered,
-         not applied behind the user's back. -->
-    <key>SUAutomaticallyUpdate</key><false/>
+    <key>NSHumanReadableCopyright</key><string>PulseLight, based on github.com/qunqin24/Pulse</string>
 </dict>
 </plist>
 PLIST
@@ -119,7 +111,7 @@ echo "→ $APP"
 # `ditto`, not `zip`: an app bundle carries symlinks and resource forks that a
 # plain zip quietly flattens, and the unzipped copy then refuses to launch.
 if [ "${1:-}" = "--zip" ]; then
-    ZIP="build.noindex/Pulse-$VERSION.zip"
+    ZIP="build.noindex/PulseLight-$VERSION.zip"
     rm -f "$ZIP"
     ditto -c -k --keepParent "$APP" "$ZIP"
     echo "→ $ZIP"

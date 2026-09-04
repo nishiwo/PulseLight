@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import AppKit
 
 @MainActor
@@ -32,6 +33,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Keep the registered status line path pointing at wherever this
         // build actually lives, since rebuilding can move it.
         StatusLineHook.repairPathIfNeeded()
+
+        // Claude Code and Codex invoke this executable in a lightweight hook
+        // mode for exact running/approval/completed transitions. Reinstalling
+        // also repairs the path after the app is moved; unrelated hooks stay.
+        AgentEventHook.installOrRepair()
 
         // Caches whose format changed are invalidated by renaming the file;
         // this takes the orphans away rather than leaving them on disk.

@@ -1,9 +1,10 @@
+/* Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE. */
 /* Menu bar */
 "Settings…" = "Settings…";
-"Quit Pulse" = "Quit Pulse";
+"Quit Pulse" = "Quit PulseLight";
 
 /* Settings window */
-"Pulse Settings" = "Pulse Settings";
+"Pulse Settings" = "PulseLight Settings";
 "Panel" = "Panel";
 "Application" = "Application";
 "General" = "General";
@@ -52,8 +53,12 @@
 
 
 /* Accessibility */
-"Pulse floating usage panel" = "Pulse floating usage panel";
+"Pulse floating usage panel" = "PulseLight floating usage panel";
 "Provider usage selector" = "Provider usage selector";
+"Agent idle" = "Agent idle";
+"Agent running" = "Agent running";
+"Agent completed" = "Agent completed";
+"Agent needs attention" = "Agent needs attention";
 "%@ usage" = "%@ usage";
 "%@ usage details" = "%@ usage details";
 "%@ used, %@" = "%@ used, %@";

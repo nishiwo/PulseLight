@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import SwiftUI
 
 /// Layout constants for the detail bubble. Shared with
@@ -353,6 +354,7 @@ private struct PulseProgressStyle: ProgressViewStyle {
     }
 }
 
+#if canImport(PreviewsMacros)
 #Preview("Detail card") {
     UsageDetailCard(
         usage: .unavailable(.claudeCode, reason: .loading),
@@ -362,3 +364,4 @@ private struct PulseProgressStyle: ProgressViewStyle {
     .padding(40)
     .background(.gray)
 }
+#endif

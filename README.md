@@ -1,142 +1,74 @@
-<p align="center">
-  <img src="AppIcon/pulse-icon-1024.png" width="112" alt="Pulse">
-</p>
+# PulseLight
 
-<h1 align="center">Pulse</h1>
+一个贴在 macOS 屏幕边缘的 AI 状态与 Token 用量面板。
 
-<p align="center">
-  <b>A lightweight, elegant screen-edge monitor for your AI coding allowances.</b><br>
-  Real-time remaining quotas and rate limits for Claude Code, Codex, Cursor, GitHub Copilot, Antigravity, Grok, and more.
-</p>
+PulseLight 将 [Pulse](https://github.com/qunqin24/Pulse) 的多模型额度展示，和
+[AgLight](https://github.com/ryubyte/aglight) 的 AI 运行状态思路合并为一个轻量应用：
+平时只显示一条 6pt 的吸边颜色条，鼠标移入后展开完整用量面板。
 
-<p align="center">
-  <a href="https://github.com/qunqin24/Pulse/releases/latest"><img src="https://img.shields.io/github/v/release/qunqin24/Pulse?color=black" alt="Latest Release"></a>
-  <img src="https://img.shields.io/badge/macOS-14.0%2B%20Sonoma-333333?logo=apple" alt="macOS 14+">
-  <a href="https://github.com/qunqin24/Pulse/actions/workflows/ci.yml"><img src="https://github.com/qunqin24/Pulse/actions/workflows/ci.yml/badge.svg" alt="CI Build"></a>
-  <img src="https://img.shields.io/badge/Swift-6.0-F05138?logo=swift&logoColor=white" alt="Swift 6.0">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue" alt="License"></a>
-</p>
+## 80 / 20 吸边设计
 
-<p align="center">
-  <sub><b>macOS 14 Sonoma or newer</b> · Apple Silicon & Intel Universal · <a href="README.zh-CN.md"><b>简体中文</b></a></sub>
-</p>
+| 区域 | 颜色 | 含义 |
+| --- | --- | --- |
+| 上方 80% | 灰色 | AI 空闲 |
+| 上方 80% | 黄色 | AI 正在运行 |
+| 上方 80% | 红色闪烁 | 等待用户确认或授权 |
+| 上方 80% | 绿色 | AI 刚刚完成，保留 8 秒 |
+| 下方 20% | 绿 / 黄 / 红 | 当前可见账号中最紧张的 Token 限额 |
 
-<p align="center">
-  <img src="Docs/demo.gif" width="340" alt="Pulse floating rail docked against the screen edge">
-</p>
+额度颜色阈值：低于 50% 为绿色，50%–75% 为黄色，达到 75% 为红色。
+左侧、右侧和顶部吸边均使用同一套比例。
 
-Pulse is an unobtrusive floating monitor that docks neatly along the edge of your screen. It queries official quota endpoints directly to show exactly how much of your AI coding allowance remains across all your assistants — with zero estimation, zero telemetry, and zero backend.
+## 特性
 
----
+- 保留 Pulse 原有的多账号、多服务商用量圆环和详情卡片。
+- 同时监听 Claude Code 与 Codex 的运行、授权和完成事件。
+- 按会话分别保存状态，避免一个任务完成后覆盖另一个仍在等待授权的任务。
+- Hook 只在本机调用 PulseLight 自身，不启动额外 HTTP 服务。
+- 合并配置时保留现有 Hook，并在首次修改前创建 `.pulselight-backup` 备份。
+- 使用独立的 App 名称、Bundle ID、缓存目录与登录启动项，不覆盖原 Pulse。
 
-## Key Features
+## 安装
 
-### At-a-Glance Status Rings
-- **Usage-Aware Colors**: Dynamic color gradients shift from green to amber, red, and deep red when exhausted — or set custom accent colors per account.
-- **Active Turn Indicator**: A subtle revolving dot indicates whether an agent is actively generating responses in real-time (Claude Code & Codex).
-- **Elapsed Window Arc**: An optional secondary outer arc visualizes how much time in the current rate-limit window has elapsed.
-- **Countdown Mode**: Toggle between showing spent quota (`75% used`) or remaining balance (`25% left`).
+从仓库的 Releases 下载 `PulseLight-1.0.7.zip`，解压后将 `PulseLight.app` 放进
+`Applications` 并启动。
 
-### Hover Details & Smart Forecasting
-- **Complete Limit Breakdown**: Hover over any ring to reveal a detailed card showing every reported quota pool, reset countdowns, and current window status.
-- **Burn-Rate Forecast**: Automatically projects whether your current pace will outlast the quota window and displays an estimated time-to-exhaustion (ETA) when risk is detected.
-- **Pin Primary Window**: Pin whichever limit matters most to the ring, or let Pulse automatically track the one closest to exhaustion.
+当前提供的安装包为 Apple Silicon（arm64）版本，要求 macOS 14 或更高版本。
+它使用本地临时签名，尚未经过 Apple Developer ID 公证；首次打开时可能需要在
+“系统设置 → 隐私与安全性”中确认。
 
-### Native, Fluid & Non-Intrusive
-- **Flexible Edge Docking**: Dock to the left, right, or top of your screen (above the menu bar), or float freely anywhere.
-- **Multi-Monitor Native**: Drag Pulse to any secondary display; it remembers screen placement and gracefully returns if disconnected.
-- **Auto-Collapse**: Automatically folds into a razor-thin sliver when idle to eliminate distraction, glowing red only when quota runs critically low.
-- **Spaces-Friendly**: By default, stays out of your full-screen application Spaces.
-- **macOS Aesthetic**: Classic solid obsidian surface or native **Liquid Glass** on macOS 26+.
+首次启动会把 PulseLight Hook 合并到：
 
-### Multi-Account & Local Ledger
-- **Multi-Account Support**: Monitor multiple subscriptions for the same provider (e.g., two Claude Code or Codex accounts) side-by-side with custom labels.
-- **On-Device Spending History**: Reconstructs your historical token expenditures from local CLI session transcripts, calculated against published API prices.
-- **Privacy First**: 100% on-device operation. No servers, no accounts, no proxies, and zero telemetry.
+- Claude Code：`~/.claude/settings.json`
+- Codex：`~/.codex/hooks.json`
 
-<p align="center">
-  <img src="Docs/panel.png" height="300" alt="Detailed usage card beside rail">
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="Docs/settings.png" height="300" alt="Pulse Settings">
-</p>
-
----
-
-## Supported Providers & Data Routes
-
-Pulse queries the authoritative figures reported by each service provider. It never guesses percentages from local token counts:
-
-| Provider | Data Route & Auth Method | Notes |
-|---|---|---|
-| **Claude Code** | Official OAuth usage endpoint; automatic fallbacks to Claude Desktop session & Status Line | Reads existing CLI/Desktop session; auto-falls back seamlessly |
-| **Codex** | Official client endpoint; fallback to `codex app-server` | Reads local Codex credentials directly |
-| **Antigravity** | Local Language Server (LSP) | Active while the Antigravity editor is running |
-| **Cursor** | Cursor account usage summary API | Shows fast and slow request pools from existing editor login |
-| **Grok** | Grok Build CLI proxy (`cli-chat-proxy.grok.com`) | Single unified weekly pool shared across all Grok products |
-| **Grok Bot** | Cursor dashboard API | The xAI quota included with Cursor subscriptions |
-| **GitHub Copilot** | GitHub Device Code authentication | Requests minimal `read:user` scope; never accesses repositories |
-| **OpenCode Go** | API key or existing OpenCode CLI credentials | Fully configurable in Settings |
-| **Kimi Code** | Direct API key | Configured via Settings |
-| **Z.ai** | Direct API key | International storefront (`api.z.ai`) |
-| **GLM Coding Plan** | Direct API key or saved GLM tooling credentials | Mainland storefront (`open.bigmodel.cn`) |
-| **MiniMax / MiniMax CN** | Direct API key | Supports international (`minimax.io`) & mainland (`minimaxi.com`) |
-| **Ollama Cloud** | Browser session cookie | Read locally from browser. See [Docs/ollama-cloud.md](Docs/ollama-cloud.md) |
-
----
-
-## Installation
-
-1. Download the latest **`Pulse-x.y.z.dmg`** from [Releases](https://github.com/qunqin24/Pulse/releases/latest).
-2. Open the disk image and drag **Pulse** into your `Applications` folder.
-
-> [!NOTE]
-> **macOS Gatekeeper First Launch**:  
-> Pulse is an open-source project without an Apple Developer certificate. On first launch, macOS may block the app:
-> - **Option 1 (GUI)**: Launch Pulse, dismiss the alert, open **System Settings → Privacy & Security**, and click **Open Anyway**.
-> - **Option 2 (Terminal)**:
->   ```bash
->   xattr -cr /Applications/Pulse.app
->   ```
-> *(Subsequent updates via built-in Sparkle update smoothly without repeated prompts).*
-
----
-
-## Privacy & Security
-
-Pulse is designed with strict local-first security principles:
-- **Zero Backend**: Pulse runs exclusively on your machine without intermediate proxy servers.
-- **Local Credentials**: Reads credentials already stored locally by your development tools (`~/.claude`, `~/.codex`, Cursor storage, etc.).
-- **Encrypted Local Storage**: Manually entered API keys and session tokens are encrypted and saved strictly in Pulse's local application directory with owner-only permissions.
-- **Code & Chat Privacy**: Pulse never reads your source code, terminal history, prompts, or LLM conversations.
-
----
-
-## Build from Source
-
-Pulse is built using native Swift and SwiftUI without heavy external dependencies.
+手动管理 Hook：
 
 ```bash
-# Clone the repository
-git clone https://github.com/qunqin24/Pulse.git
-cd Pulse
-
-# Build and run directly
-swift run Pulse
-
-# Or package into a native macOS app bundle
-./Scripts/bundle.sh
+/Applications/PulseLight.app/Contents/MacOS/Pulse --install-agent-hooks
+/Applications/PulseLight.app/Contents/MacOS/Pulse --uninstall-agent-hooks
 ```
 
-See [Docs/build-from-source.md](Docs/build-from-source.md) for full developer requirements and toolchain setup.
+## 本地构建
 
----
+```bash
+swift build -Xswiftc -swift-version -Xswiftc 6
+./Scripts/check-localization.sh
+./Scripts/bundle.sh --zip
+```
 
-## Design Attribution
+安装完整 Xcode 时，打包脚本会生成 Intel + Apple Silicon 通用版本；只有 Command
+Line Tools 时，会生成当前 Mac 架构的版本。
 
-Pulse was inspired by a UI concept shared by [**Vinz** (@hivinz_)](https://x.com/hivinz_/status/2092996055248126353) on X in August 2026. Pulse is an independent implementation with its own interactions, functionality, animations, and visual details. Vinz is not affiliated with or responsible for Pulse.
+## 项目来源
 
----
+PulseLight 基于 qunqin24 的 [Pulse](https://github.com/qunqin24/Pulse) 修改，核心的
+额度读取、浮动面板和服务商支持来自 Pulse。AI 状态交互参考了 ryubyte 的
+[AgLight](https://github.com/ryubyte/aglight) 设计思路。
+
+感谢两个项目的作者与贡献者。具体修改见 [CHANGELOG.md](CHANGELOG.md) 和
+[NOTICE](NOTICE)。
 
 ## License
 
-Licensed under [Apache 2.0](LICENSE). Bundled third-party assets retain their respective licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+本项目沿用 [Apache License 2.0](LICENSE)。

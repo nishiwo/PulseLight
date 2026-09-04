@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import SwiftUI
 
 /// Layout constants for the collapsed dock rail. Shared with
@@ -266,9 +267,10 @@ struct UsageDockView: View {
     var isDocked: Bool = true
     /// Open, or wound down to the sliver.
     var isExpanded: Bool = true
-    /// Colours the sliver when a limit is close enough that hiding the rail
-    /// would be hiding something worth seeing.
-    var alert: Color?
+    /// The upper 80% of a collapsed rail: idle/running/completed/attention.
+    var agentSignal: AgentSignal = .idle
+    /// The lower 20% of a collapsed rail: the highest visible token usage.
+    var quotaTint: Color? = nil
     /// Liquid Glass instead of flat black.
     var usesGlass: Bool = false
     /// Called as the pointer arrives on a provider's ring. The details flyout
@@ -327,11 +329,22 @@ struct UsageDockView: View {
         return PanelSurface(
             shape: shape,
             usesGlass: usesGlass,
-            // Only the sliver carries the alert colour: expanded, the rings
-            // already say which limit is where.
-            tint: isExpanded ? nil : alert
+            // The collapsed rail draws two independently meaningful regions
+            // above this surface; expanded, the rings already carry usage.
+            tint: nil
         )
             .frame(width: currentSize.width, height: currentSize.height)
+            .overlay {
+                if !isExpanded {
+                    CollapsedSignalStrip(
+                        edge: edge,
+                        signal: agentSignal,
+                        quotaTint: quotaTint
+                    )
+                    .clipShape(shape)
+                    .allowsHitTesting(false)
+                }
+            }
             .overlay(alignment: edge.stackAlignment) {
                 // Only while collapsed, and only over the sliver: a tracking
                 // area on the full band would open the panel from sixty points
@@ -344,6 +357,7 @@ struct UsageDockView: View {
                         .background(PointerEntryReporter(onEnter: onOpen))
                         .accessibilityElement()
                         .accessibilityLabel(String.localized("Show usage panel"))
+                        .accessibilityValue(agentSignal.accessibilityText)
                 }
             }
     }
@@ -387,6 +401,83 @@ struct UsageDockView: View {
         .padding(edge.isVertical ? .vertical : .horizontal, DockLayout.endPadding(docked: isDocked))
         .padding(edge.isVertical ? .horizontal : .vertical, DockLayout.horizontalPadding)
         .frame(width: railSize.width, height: railSize.height)
+    }
+}
+
+/// The whole point of PulseLight in its smallest state: most of the strip is
+/// the agent traffic light, while the final fifth remains the token gauge.
+/// It follows the rail's run, so the 80/20 split remains readable on either a
+/// side edge or the top edge without changing any panel geometry.
+private struct CollapsedSignalStrip: View {
+    let edge: PanelEdge
+    let signal: AgentSignal
+    let quotaTint: Color?
+
+    @State private var attentionPulse = false
+
+    var body: some View {
+        GeometryReader { proxy in
+            if edge.isVertical {
+                VStack(spacing: 0) {
+                    signalColour
+                        .frame(height: proxy.size.height * 0.8)
+                    divider
+                    quotaColour
+                }
+            } else {
+                HStack(spacing: 0) {
+                    signalColour
+                        .frame(width: proxy.size.width * 0.8)
+                    divider
+                    quotaColour
+                }
+            }
+        }
+        .task(id: signal) {
+            attentionPulse = false
+            guard signal == .attention else { return }
+            try? await Task.sleep(for: .milliseconds(40))
+            withAnimation(.easeInOut(duration: 0.55).repeatForever(autoreverses: true)) {
+                attentionPulse = true
+            }
+        }
+    }
+
+    private var signalColour: some View {
+        signal.tint
+            .opacity(signal == .attention && !attentionPulse ? 0.42 : 1)
+    }
+
+    private var quotaColour: Color {
+        quotaTint ?? Color.primary.opacity(0.18)
+    }
+
+    private var divider: some View {
+        Color.black.opacity(0.45)
+            .frame(
+                width: edge.isVertical ? nil : 1,
+                height: edge.isVertical ? 1 : nil
+            )
+    }
+}
+
+private extension AgentSignal {
+    var tint: Color {
+        switch self {
+        case .idle: Color.primary.opacity(0.18)
+        case .running: .pulseCaution
+        case .completed: .pulseGood
+        case .attention: .pulseWarning
+        }
+    }
+
+    var accessibilityText: String {
+        switch self {
+        case .idle: .localized("Agent idle")
+        case .running: .localized("Agent running")
+        case .completed: .localized("Agent completed")
+        case .attention: .localized("Agent needs attention")
+        }
     }
 }
 
@@ -699,6 +790,7 @@ struct DockBerthShape: Shape {
     private static let cornerSampleCount = 48
 }
 
+#if canImport(PreviewsMacros)
 #Preview("Dock") {
     UsageDockView(
         entries: Provider.allCases.map {
@@ -712,3 +804,4 @@ struct DockBerthShape: Shape {
     .padding()
     .background(.gray)
 }
+#endif

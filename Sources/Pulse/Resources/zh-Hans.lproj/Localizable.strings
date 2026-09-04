@@ -1,9 +1,10 @@
+/* Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE. */
 /* 菜单栏 */
 "Settings…" = "设置…";
-"Quit Pulse" = "退出 Pulse";
+"Quit Pulse" = "退出 PulseLight";
 
 /* 设置窗口 */
-"Pulse Settings" = "Pulse 设置";
+"Pulse Settings" = "PulseLight 设置";
 "Panel" = "面板";
 "Application" = "应用";
 "General" = "通用";
@@ -52,8 +53,12 @@
 
 
 /* 辅助功能 */
-"Pulse floating usage panel" = "Pulse 悬浮用量面板";
+"Pulse floating usage panel" = "PulseLight 悬浮用量面板";
 "Provider usage selector" = "服务用量选择器";
+"Agent idle" = "AI 空闲";
+"Agent running" = "AI 正在运行";
+"Agent completed" = "AI 刚刚完成";
+"Agent needs attention" = "AI 正在等待确认";
 "%@ usage" = "%@ 用量";
 "%@ usage details" = "%@ 用量详情";
 "%@ used, %@" = "已用 %@，%@";

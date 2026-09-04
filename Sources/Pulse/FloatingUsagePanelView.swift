@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import SwiftUI
 
 struct FloatingUsagePanelView: View {
@@ -71,7 +72,8 @@ struct FloatingUsagePanelView: View {
                     edge: placement.edge,
                     isDocked: placement.isDocked,
                     isExpanded: isExpanded,
-                    alert: alertTint,
+                    agentSignal: store.agentSignal,
+                    quotaTint: quotaTint,
                     usesGlass: settings.usesGlass,
                     onEnter: select,
                     onRefresh: store.refresh,
@@ -172,14 +174,12 @@ struct FloatingUsagePanelView: View {
         !settings.autoCollapse || !placement.isDocked || isHovered
     }
 
-    /// The colour of the sliver when a limit is close enough that hiding the
-    /// rail would be hiding something worth seeing.
-    private var alertTint: Color? {
+    /// The worst visible limit owns the bottom fifth of the collapsed rail.
+    /// Unlike the old alert-only sliver this stays green/yellow/red at every
+    /// usage level, so the token reading remains visible while collapsed.
+    private var quotaTint: Color? {
         let worst = entries.compactMap(\.headline).max { $0.usedFraction < $1.usedFraction }
-        guard let worst,
-              worst.isExhausted || worst.usedFraction >= UsageTint.warningThreshold
-        else { return nil }
-        return worst.tint
+        return worst?.tint
     }
 
     /// Only the providers switched on in settings, so the rail shrinks when
@@ -586,6 +586,7 @@ private struct CardReveal: ViewModifier {
     }
 }
 
+#if canImport(PreviewsMacros)
 #Preview("Floating panel") {
     FloatingUsagePanelView(store: UsageStore(settings: AppSettings()), settings: AppSettings(), placement: PanelPlacement())
         .frame(
@@ -594,3 +595,4 @@ private struct CardReveal: ViewModifier {
         )
         .background(Color.gray.opacity(0.2))
 }
+#endif

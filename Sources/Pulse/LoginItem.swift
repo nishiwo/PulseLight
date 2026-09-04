@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import Foundation
 import ServiceManagement
 
@@ -107,7 +108,7 @@ enum LoginItem {
 
     // MARK: - The launch agent
 
-    private static let label = "com.pulse.launch-at-login"
+    private static let label = "com.pulselight.launch-at-login"
 
     private static var agentURL: URL {
         URL(fileURLWithPath: NSHomeDirectory())

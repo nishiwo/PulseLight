@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import Foundation
 import Observation
 
@@ -292,6 +293,9 @@ enum AgentActivity {
 final class AgentActivityMonitor {
     /// Providers whose CLI is in the middle of a turn.
     private(set) var running: Set<Provider> = []
+    /// Combined traffic-light state from exact hook events and transcript
+    /// activity. This is global on purpose: the collapsed rail has one light.
+    private(set) var signal: AgentSignal = .idle
     /// The most recent write from any provider, which is also what paces the
     /// adaptive refresh interval.
     private(set) var lastWrite: Date?
@@ -317,8 +321,8 @@ final class AgentActivityMonitor {
     func stop() {
         timer?.invalidate()
         timer = nil
-        guard !running.isEmpty else { return }
-        running = []
+        if !running.isEmpty { running = [] }
+        if signal != .idle { signal = .idle }
     }
 
     private func sample() {
@@ -326,16 +330,22 @@ final class AgentActivityMonitor {
         isScanning = true
 
         Task {
-            let states = await Task.detached(priority: .utility) { AgentActivity.states() }.value
+            let result = await Task.detached(priority: .utility) {
+                let states = AgentActivity.states()
+                let transcriptRunning = states.values.contains(where: \.isWorking)
+                let signal = AgentEventInbox.currentSignal(transcriptRunning: transcriptRunning)
+                return (states, signal)
+            }.value
             self.isScanning = false
 
-            let active = Set(states.filter(\.value.isWorking).keys)
+            let active = Set(result.0.filter(\.value.isWorking).keys)
             // Assign only on a change: this runs every couple of seconds, and
             // `@Observable` would otherwise redraw the rail each time for
             // nothing.
             if active != running { running = active }
+            if result.1 != signal { signal = result.1 }
 
-            let newest = states.values.compactMap(\.lastWrite).max()
+            let newest = result.0.values.compactMap(\.lastWrite).max()
             if newest != lastWrite { lastWrite = newest }
         }
     }

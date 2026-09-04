@@ -7,6 +7,12 @@ shows in the update window — see [Scripts/changelog.py](Scripts/changelog.py).
 Add the entry **before** tagging, in the small grammar the converter knows:
 bullets, `**bold**`, `` `code` `` and `[links](https://example.com)`.
 
+## 1.0.7
+
+- **PulseLight combines token usage and agent state in one edge rail.** When collapsed, the upper 80% is the traffic light (yellow running, flashing red needs attention, green just completed, grey idle); the lower 20% keeps showing the highest visible token usage as green, yellow or red.
+- Claude Code and Codex events are captured by same-executable local hooks. Existing hook groups are preserved, per-session state avoids one task hiding another, and the app repairs hook paths after it is moved.
+- The packaged app has its own name, bundle identifier, storage directory and login item, and does not inherit Pulse's upstream auto-update feed.
+
 ## 1.0.6
 
 - **Grok**, read from the login Grok Build's CLI already stores — nothing to paste. One thing worth knowing before the ring confuses you: since June 2026 a paid Grok plan spends **one weekly pool across every Grok product** — the web chat, Imagine, voice, the API and the CLI alike — so this is what the account has spent this week, not what the CLI has. That is why it is called Grok rather than Grok Build.

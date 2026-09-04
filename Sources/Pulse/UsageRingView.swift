@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import AppKit
 import SwiftUI
 
@@ -373,6 +374,7 @@ private enum LobeIconStore {
     }
 }
 
+#if canImport(PreviewsMacros)
 #Preview("Usage rings") {
     HStack(spacing: 20) {
         ForEach(Provider.allCases) { provider in
@@ -382,3 +384,4 @@ private enum LobeIconStore {
     .padding()
     .background(.black)
 }
+#endif

@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import AppKit
 import SwiftUI
 
@@ -11,6 +12,11 @@ import SwiftUI
 @main
 enum PulseMain {
     static func main() {
+        if CommandLine.arguments.contains(AgentEventHook.modeArgument) {
+            AgentEventHook.runAsHook()
+            exit(0)
+        }
+
         if CommandLine.arguments.contains(StatusLineHook.modeArgument) {
             StatusLineHook.runAsStatusLine()
             exit(0)
@@ -24,6 +30,14 @@ enum PulseMain {
         }
         if CommandLine.arguments.contains("--uninstall-statusline") {
             print(StatusLineHook.uninstall() ? "uninstalled" : "failed")
+            exit(0)
+        }
+        if CommandLine.arguments.contains("--install-agent-hooks") {
+            print(AgentEventHook.install() ? "installed" : "failed")
+            exit(0)
+        }
+        if CommandLine.arguments.contains("--uninstall-agent-hooks") {
+            print(AgentEventHook.uninstall() ? "uninstalled" : "failed")
             exit(0)
         }
 
@@ -42,7 +56,7 @@ struct PulseApp: App {
         // A plain menu rather than a popover: everything Pulse has to say
         // about usage it says in the floating panel, so this is only a way in
         // to settings and out of the app.
-        MenuBarExtra("Pulse", systemImage: "chart.pie.fill") {
+        MenuBarExtra("PulseLight", systemImage: "chart.pie.fill") {
             MenuBarContent(
                 settings: appDelegate.settings,
                 update: appDelegate.update,

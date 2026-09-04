@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import AppKit
 import Foundation
 import Observation
@@ -145,6 +146,9 @@ final class UsageStore {
 
     /// Whether a provider's CLI is working at this moment.
     func isRunning(_ provider: Provider) -> Bool { activity.running.contains(provider) }
+
+    /// One global state for the traffic-light portion of the collapsed rail.
+    var agentSignal: AgentSignal { activity.signal }
 
     /// Whether this provider is being refreshed explicitly from its ring.
     /// Automatic background passes stay silent on the rail.

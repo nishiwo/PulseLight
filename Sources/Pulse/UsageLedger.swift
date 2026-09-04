@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import Foundation
 
 /// Tokens of each kind, which is what a price list needs to become money.
@@ -23,10 +24,11 @@ struct TokenTally: Codable, Sendable, Equatable {
     /// plain input rate — that is the provider's own arrangement for models
     /// that don't price the cache separately, not a guess.
     func cost(at price: ModelPrice) -> Double {
-        (Double(input) * price.input
-            + Double(cacheWrite) * (price.cacheWrite ?? price.input)
-            + Double(cacheRead) * (price.cacheRead ?? price.input)
-            + Double(output) * price.output) / 1_000_000
+        let freshInputCost = Double(input) * price.input
+        let cacheWriteCost = Double(cacheWrite) * (price.cacheWrite ?? price.input)
+        let cacheReadCost = Double(cacheRead) * (price.cacheRead ?? price.input)
+        let outputCost = Double(output) * price.output
+        return (freshInputCost + cacheWriteCost + cacheReadCost + outputCost) / 1_000_000
     }
 }
 

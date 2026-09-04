@@ -1,3 +1,4 @@
+// Modified for PulseLight in 2026. See CHANGELOG.md and NOTICE.
 import AppKit
 import SwiftUI
 
@@ -1475,6 +1476,7 @@ enum SettingsPane: Hashable {
     }
 }
 
+#if canImport(PreviewsMacros)
 #Preview("Settings") {
     SettingsView(
         store: UsageStore(settings: AppSettings()),
@@ -1483,3 +1485,4 @@ enum SettingsPane: Hashable {
         update: AppUpdate()
     )
 }
+#endif
