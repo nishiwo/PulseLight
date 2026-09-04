@@ -1,5 +1,7 @@
 # PulseLight
 
+中文｜[English](README.en.md)
+
 一个贴在 macOS 屏幕边缘的 AI 状态与 Token 用量面板。
 
 PulseLight 将 [Pulse](https://github.com/qunqin24/Pulse) 的多模型额度展示，和

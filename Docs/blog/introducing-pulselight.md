@@ -1,5 +1,7 @@
 # 我把 Token 进度条和 AI 红绿灯，合成了一条 6px 的侧边栏
 
+中文｜[English version](introducing-pulselight.en.md)
+
 平时同时使用 Claude Code 和 Codex 时，我的桌面上常驻着两个小工具。
 
 一个是 Pulse，用来显示各个 AI 账号的 Token 用量；另一个是 AgLight，用红绿灯告诉我 AI 是在运行、等待确认，还是刚刚完成。两个工具各自都很好用，但它们表达的其实是同一件事：**现在要不要关注 AI，以及还能用多久。**
