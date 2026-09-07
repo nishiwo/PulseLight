@@ -9,11 +9,15 @@ Pulse already answered the second question with a compact floating usage
 panel. AgLight had a clear answer for the first one: a traffic light. I built
 PulseLight to make those two signals share one quiet place on the screen edge.
 
-The expanded panel below is the real runtime screenshot you provided. The
-collapsed 6pt rail is enlarged only for readability, with a legend explaining
-the Agent state in the top 80% and Token health in the bottom 20%.
+The expanded panel is shown as the original runtime screenshot, with its
+original proportions preserved:
 
-![PulseLight 80/20 real expanded view and collapsed-state legend](../images/pulselight-real-effect.png)
+![PulseLight real expanded state](../images/pulselight-expanded-real.png)
+
+The collapsed 6pt rail has a separate enlarged legend, so it does not resize
+the real screenshot:
+
+![PulseLight 80/20 collapsed-state legend](../images/pulselight-collapsed-legend.png)
 
 ## Why 80 / 20
 

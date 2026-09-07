@@ -8,9 +8,13 @@ PulseLight 将 [Pulse](https://github.com/qunqin24/Pulse) 的多模型额度展�
 [AgLight](https://github.com/ryubyte/aglight) 的 AI 运行状态思路合并为一个轻量应用：
 平时只显示一条 6pt 的吸边颜色条，鼠标移入后展开完整用量面板。
 
-下面是实际展开截图与收起状态说明：展开部分直接使用真实运行界面截图，收起部分按当前 80/20 逻辑放大展示。
+展开状态直接使用真实运行截图，保持原始比例：
 
-![PulseLight 80/20 真实展开界面与收起状态说明](Docs/images/pulselight-real-effect.png)
+![PulseLight 真实展开状态](Docs/images/pulselight-expanded-real.png)
+
+收起状态单独放大说明，不会压缩上面的真实截图：
+
+![PulseLight 80/20 收起状态说明](Docs/images/pulselight-collapsed-legend.png)
 
 ## 80 / 20 吸边设计
 

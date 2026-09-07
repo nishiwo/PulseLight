@@ -8,9 +8,13 @@
 
 于是我做了 PulseLight。
 
-下面这张图的展开部分直接使用真实运行界面截图；左侧收起条为了看清 6pt 吸边做了放大，并标注了上半部 Agent 状态和下半部 Token 状态。
+展开状态直接使用真实运行界面截图，保持原始比例：
 
-![PulseLight 80/20 真实展开界面与收起状态说明](../images/pulselight-real-effect.png)
+![PulseLight 真实展开状态](../images/pulselight-expanded-real.png)
+
+收起状态单独放大说明，避免压缩真实截图：
+
+![PulseLight 80/20 收起状态说明](../images/pulselight-collapsed-legend.png)
 
 ## 为什么是 80 / 20
 

@@ -9,10 +9,15 @@ PulseLight combines the multi-provider quota panel from
 inspired by [AgLight](https://github.com/ryubyte/aglight). It stays as a 6pt
 edge strip until you point at it, then expands into the full usage panel.
 
-The image below combines the real expanded runtime screenshot you provided
-with an enlarged view of the collapsed 80/20 rail and its state legend.
+The expanded state is shown as the original runtime screenshot, with no
+resizing into a composite image:
 
-![PulseLight 80/20 real expanded view and collapsed-state legend](Docs/images/pulselight-real-effect.png)
+![PulseLight real expanded state](Docs/images/pulselight-expanded-real.png)
+
+The collapsed state has its own enlarged legend, so the real screenshot keeps
+its original proportions:
+
+![PulseLight 80/20 collapsed-state legend](Docs/images/pulselight-collapsed-legend.png)
 
 ## The 80 / 20 rail
 
