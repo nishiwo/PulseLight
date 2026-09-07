@@ -1,61 +1,54 @@
-# I merged Token usage and an AI traffic light into a 6px edge rail
+# One 6px rail tells you what your AI is doing—and how much Token is left
 
 [中文版](introducing-pulselight.md) | English
 
-When I use Claude Code and Codex together, I want two answers without opening
-another window: is an agent waiting for me, and how much quota is left?
+When an AI task runs in the background, you usually need two answers:
 
-Pulse already answered the second question with a compact floating usage
-panel. AgLight had a clear answer for the first one: a traffic light. I built
-PulseLight to make those two signals share one quiet place on the screen edge.
+**Is it still working? And how much quota do I have left?**
 
-The final visual combines the real expanded screenshot with the collapsed
-80/20 state explanation:
+PulseLight puts both answers in one quiet 6px edge rail. It stays nearly invisible until you need it: read the colour at a glance, then hover to open the full usage panel.
 
 ![PulseLight final visual](../images/pulselight-effect.png)
 
-## Why 80 / 20
+## The 80 / 20 rule
 
-The collapsed rail is only 6pt wide, so every colour needs a single meaning.
-The top 80% is agent state: grey for idle, yellow for working, flashing red
-for an approval request, and green for eight seconds after completion. The
-bottom 20% remains the Token signal: green when comfortable, yellow when it
-needs attention, and red when the tightest visible limit is close.
+The rail has two jobs:
 
-Agent state takes most of the space because it asks for an immediate action.
-Quota changes slowly, but it should stay visible. Moving the pointer onto the
-rail still opens Pulse's full account rings and detail cards.
+- **Top 80%: agent state**
+  - Grey: idle
+  - Yellow: working
+  - Flashing red: approval or input needed
+  - Green: just completed
+- **Bottom 20%: Token health**
+  - Green: plenty of quota
+  - Yellow: getting close to the limit
+  - Red: quota is tight
 
-## Accurate state without another server
+Agent state gets most of the rail because it tells you whether to come back now. Quota changes more slowly, so a smaller persistent signal is enough.
 
-Transcript tails are useful for deciding whether Claude Code or Codex is still
-working, but they cannot reliably tell us that an approval is waiting. So
-PulseLight installs local hooks for events such as `PermissionRequest`,
-`PreToolUse`, and `Stop`.
+## Never miss an approval while working in the background
 
-Each hook calls the PulseLight executable itself, writes one tiny local state
-record, and exits. There is no second menu-bar app and no permanent local HTTP
-server to manage.
+PulseLight watches Claude Code and Codex together. Running, waiting for permission, completed, and idle states are reflected immediately in the rail.
 
-State is saved per session. The final rail colour follows a simple priority:
+When several terminals are active, an approval request always wins over a completed task. One finished session cannot hide another session that needs your attention.
 
-`needs attention > working > just completed > idle`
+## Hover once for the complete quota view
 
-That prevents a completed task in one terminal from hiding an approval request
-in another.
+There is no second menu-bar icon and no extra monitoring window. Hover over the rail and Pulse's full usage panel opens with:
 
-## Safe configuration changes
+- Multiple accounts and providers
+- Five-hour, weekly, and other quota windows
+- Usage percentage, remaining quota, and reset times
+- Pulse's existing rings and detail cards
 
-Developer configuration is personal, so PulseLight does not replace a whole
-Hook file. It removes and refreshes only its own entries, preserves unrelated
-commands, and writes a `.pulselight-backup` before the first edit. If the app
-moves, its next launch repairs the executable paths.
+It stays quiet when collapsed and informative when expanded. Dock it to the left, right, or top edge of the screen.
 
-## Open source
+## Try it
 
-Source: <https://github.com/nishiwo/PulseLight>
+PulseLight is a macOS app for Apple Silicon and macOS 14+. Source and releases are available on GitHub:
 
-PulseLight is derived from [Pulse](https://github.com/qunqin24/Pulse), and
-its traffic-light interaction is inspired by
-[AgLight](https://github.com/ryubyte/aglight). Thanks to both projects and
-their contributors.
+<https://github.com/nishiwo/PulseLight>
+
+It is derived from [Pulse](https://github.com/qunqin24/Pulse), with the status-light interaction inspired by [AgLight](https://github.com/ryubyte/aglight).
+
+If you leave AI tasks running in the background, PulseLight is designed to answer both questions with one glance: **should you come back now, and how much longer can you keep going?**
