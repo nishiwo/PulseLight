@@ -8,9 +8,9 @@
 
 于是我做了 PulseLight。
 
-下面这张图按当前 SwiftUI 实现绘制，展示右侧吸边和鼠标移入后的展开状态。为了看清 6pt 吸边，收起状态在图中做了放大处理；它不是运行时截图。
+下面这张图的展开部分直接使用真实运行界面截图；左侧收起条为了看清 6pt 吸边做了放大，并标注了上半部 Agent 状态和下半部 Token 状态。
 
-![PulseLight 80/20 吸边与展开面板实现预览](../images/pulselight-80-20-implementation.svg)
+![PulseLight 80/20 真实展开界面与收起状态说明](../images/pulselight-real-effect.png)
 
 ## 为什么是 80 / 20
 
