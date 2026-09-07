@@ -9,15 +9,10 @@ Pulse already answered the second question with a compact floating usage
 panel. AgLight had a clear answer for the first one: a traffic light. I built
 PulseLight to make those two signals share one quiet place on the screen edge.
 
-The expanded panel is shown as the original runtime screenshot, with its
-original proportions preserved:
+The final visual combines the real expanded screenshot with the collapsed
+80/20 state explanation:
 
-![PulseLight real expanded state](../images/pulselight-expanded-real.png)
-
-The collapsed 6pt rail has a separate enlarged legend, so it does not resize
-the real screenshot:
-
-![PulseLight 80/20 collapsed-state legend](../images/pulselight-collapsed-legend.png)
+![PulseLight final visual](../images/pulselight-effect.png)
 
 ## Why 80 / 20
 

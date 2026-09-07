@@ -8,13 +8,9 @@
 
 于是我做了 PulseLight。
 
-展开状态直接使用真实运行界面截图，保持原始比例：
+最终效果图如下：展开部分使用真实运行截图，收起部分说明 80/20 两段颜色的含义。
 
-![PulseLight 真实展开状态](../images/pulselight-expanded-real.png)
-
-收起状态单独放大说明，避免压缩真实截图：
-
-![PulseLight 80/20 收起状态说明](../images/pulselight-collapsed-legend.png)
+![PulseLight 最终效果图](../images/pulselight-effect.png)
 
 ## 为什么是 80 / 20
 
